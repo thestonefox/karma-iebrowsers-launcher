@@ -1,0 +1,23 @@
+{
+  "name": "karma-iebrowsers-launcher",
+  "version": "0.0.1",
+  "description": "A Karma plugin. Launcher for IEBrowsers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "karma-plugin",
+    "karma-launcher",
+    "ie"
+  ],
+  "author": "Harvey Ball <harvey.ball@causeway.com>",
+  "dependencies": {
+    "request": ">=2.33.0"
+  },
+  "peerDependencies": {
+    "karma": ">=0.9"
+  },
+  "license": "MIT"
+}
+
