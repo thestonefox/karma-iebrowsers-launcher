@@ -21,28 +21,45 @@ var IEBrowsersLauncher = (function() {
         typeof config.iebrowsers.host === 'undefined') {
       throw new Error('iebrowsers not correctly configured in karma.conf.js');
     }
-
-  }
-
-  IEBrowsersLauncher.prototype.actionUrl = function(action, version, data) {
-    return this.host + '?action=' + action + '&version=' + version.replace('IE', '') + '&data=' + data;
-  }
+  };
 
   IEBrowsersLauncher.prototype.start = function(url) {
-    url = this.callbackUrl + '?id=' + this.id;
-    var path = this.actionUrl('open', this.name, url);
+    var path = this.actionUrl('running', this.name, '');
+    var self = this;
     request(path, function (error, response, body) {
-      if(error) throw error;
+      if (error) throw error;
+      if (body === "true") {
+        self.run();
+      } else {
+        throw new Error(self.name + ' is not running');
+      }
     });
   };
 
   IEBrowsersLauncher.prototype.kill = function(done) {
     var path = this.actionUrl('close', this.name, '');
     request(path, function (error, response, body) {
-      if(error) throw error;
+      if (error) throw error;
       return done();
     });
   };
+
+  IEBrowsersLauncher.prototype.actionUrl = function(action, version, data) {
+    return this.host + '?action=' + action + '&version=' + version.replace('IE', '') + '&data=' + data;
+  };
+
+  IEBrowsersLauncher.prototype.run = function() {
+    url = this.callbackUrl + '?id=' + this.id;
+    var path = this.actionUrl('open', this.name, url);
+    var self = this;
+    request(path, function (error, response, body) {
+      if (error) throw error;
+      if (body === 'Open not available') {
+        throw new Error(self.name + ' is not available');
+      }
+    });
+  };
+
 
   IEBrowsersLauncher.prototype.markCaptured = function() {
     return this.captured = true;
@@ -55,7 +72,24 @@ var IEBrowsersLauncher = (function() {
   return IEBrowsersLauncher;
 })();
 
+
 module.exports = {
+  'launcher:IE6': ['type', function(id, config) {
+      return new IEBrowsersLauncher('IE6', id, config);
+     }
+  ],
+  'launcher:IE7': ['type', function(id, config) {
+      return new IEBrowsersLauncher('IE7', id, config);
+     }
+  ],
+  'launcher:IE8': ['type', function(id, config) {
+      return new IEBrowsersLauncher('IE8', id, config);
+     }
+  ],
+  'launcher:IE9': ['type', function(id, config) {
+      return new IEBrowsersLauncher('IE9', id, config);
+     }
+  ],
   'launcher:IE10': ['type', function(id, config) {
       return new IEBrowsersLauncher('IE10', id, config);
      }
