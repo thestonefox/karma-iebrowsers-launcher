@@ -28,10 +28,10 @@ var IEBrowsersLauncher = (function() {
     var self = this;
     request(path, function (error, response, body) {
       if (error) throw error;
-      if (body === "true") {
+      if (response.statusCode === 200) {
         self.run();
       } else {
-        throw new Error(self.name + ' is not running');
+        throw new Error(self.name + " is not running.");
       }
     });
   };
@@ -54,10 +54,14 @@ var IEBrowsersLauncher = (function() {
     var self = this;
     request(path, function (error, response, body) {
       if (error) throw error;
-      if (body === 'Open not available') {
-        throw new Error(self.name + ' is not available');
+      if (response.statusCode !== 200) {
+        throw new Error(self.processResponse(response.body));
       }
     });
+  };
+
+  IEBrowsersLauncher.prototype.processResponse = function(body) {
+    return body;
   };
 
 
@@ -73,29 +77,17 @@ var IEBrowsersLauncher = (function() {
 })();
 
 
-module.exports = {
-  'launcher:IE6': ['type', function(id, config) {
-      return new IEBrowsersLauncher('IE6', id, config);
-     }
-  ],
-  'launcher:IE7': ['type', function(id, config) {
-      return new IEBrowsersLauncher('IE7', id, config);
-     }
-  ],
-  'launcher:IE8': ['type', function(id, config) {
-      return new IEBrowsersLauncher('IE8', id, config);
-     }
-  ],
-  'launcher:IE9': ['type', function(id, config) {
-      return new IEBrowsersLauncher('IE9', id, config);
-     }
-  ],
-  'launcher:IE10': ['type', function(id, config) {
-      return new IEBrowsersLauncher('IE10', id, config);
-     }
-  ],
-  'launcher:IE11': ['type', function(id, config) {
-      return new IEBrowsersLauncher('IE11', id, config);
-     }
-  ],
-};
+function getLauncher(name) {
+  return function(id, config) {
+    return new IEBrowsersLauncher(name, id, config);
+  }
+}
+
+
+var IEVersions = ['IE6', 'IE7' , 'IE8', 'IE9', 'IE10' ,'IE11'];
+
+module.exports = {};
+IEVersions.forEach(function(version) {
+  module.exports['launcher:' + version] = ['type', getLauncher(version)];
+});
+
