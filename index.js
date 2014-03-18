@@ -76,13 +76,11 @@ var IEBrowsersLauncher = (function() {
   return IEBrowsersLauncher;
 })();
 
-
 function getLauncher(name) {
   return function(id, config) {
     return new IEBrowsersLauncher(name, id, config);
   }
 }
-
 
 var IEVersions = ['IE6', 'IE7' , 'IE8', 'IE9', 'IE10' ,'IE11'];
 
@@ -90,4 +88,3 @@ module.exports = {};
 IEVersions.forEach(function(version) {
   module.exports['launcher:' + version] = ['type', getLauncher(version)];
 });
-
