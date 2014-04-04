@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Karma-iebrowsers-launcher : A Karma browser launcher for the ie-browsers VM project" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Karma-iebrowsers-launcher</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/livestax/karma-iebrowsers-launcher">View on GitHub</a>
+
+          <h1 id="project_title">Karma-iebrowsers-launcher</h1>
+          <h2 id="project_tagline">A Karma browser launcher for the ie-browsers VM project</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/livestax/karma-iebrowsers-launcher/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/livestax/karma-iebrowsers-launcher/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="karma-iebrowsers-launcher" class="anchor" href="#karma-iebrowsers-launcher"><span class="octicon octicon-link"></span></a>Karma IEBrowsers Launcher</h1>
+
+<p><a href="http://karma-runner.github.io">Karma</a> browser launcher for the <a href="https://github.com/livestax/ie-browsers">IEBrowsers</a> virtual machines.</p>
+
+<p>This Karma plugin adds browser launchers for IEBrowsers virtual machines. This allows for testing across multiple versions of Internet Explorer simultaneously.</p>
+
+<p><em>Karma can be installed on a separate machine from the IEBrowsers VM as it communicates over http and web sockets.</em></p>
+
+<h2>
+<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
+
+<p>You must have installed the versions of IE on the IEBrowsers VM prior to setting them up in the Karma config.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Intall the plugin from npm:</p>
+
+<div class="highlight highlight-sh"><pre><span class="nv">$npm</span> install karma-iebrowsers-launcher --save-dev
+</pre></div>
+
+<p>Or from Github</p>
+
+<div class="highlight highlight-sh"><pre><span class="nv">$npm</span> install <span class="s1">'git+https://github.com/livestax/karma-iebrowsers-launcher.git'</span> --save-dev
+</pre></div>
+
+<p>Install the IE Browser virtual machines you wish to test against. See the <a href="https://github.com/livestax/ie-browsers">IEBrowsers Repo</a> for further instructions</p>
+
+<p><strong>Quick example of how to install IE10 via IEBrowsers:</strong></p>
+
+<p>Visit <code>http://&lt;your-vm-host-ip&gt;/iebrowsers/iecontrol.php?action=install&amp;version=10</code> in your web browser</p>
+
+<p><em>or</em></p>
+
+<div class="highlight highlight-sh"><pre>curl <span class="s2">"http://&lt;your-vm-host-ip&gt;/iebrowsers/iecontrol.php?action=install&amp;version=10"</span>
+</pre></div>
+
+<h4>
+<a name="configue-karma" class="anchor" href="#configue-karma"><span class="octicon octicon-link"></span></a>Configue Karma</h4>
+
+<p>Ensure your karma.conf.js is configured to allow your karma runner to be accessed from the IEBrowsers VM (if it's on a different machine then it will need a network route between the two machines)</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+
+  <span class="c1">// Ensure your hostname is set to the publicly accessible IP and not localhost</span>
+  <span class="nx">hostname</span><span class="o">:</span> <span class="s1">'192.168.1.10'</span><span class="p">,</span>
+  <span class="nx">port</span><span class="o">:</span> <span class="mi">9876</span><span class="p">,</span>
+
+  <span class="c1">// Add the IEBrowsers host path to the VM controller</span>
+  <span class="nx">iebrowsers</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">host</span><span class="o">:</span> <span class="s1">'http://192.168.1.11/ie-browsers/iecontrol.php'</span><span class="p">,</span>
+  <span class="p">},</span>
+
+  <span class="c1">// Set the IE Browsers you wish to test against</span>
+  <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">'IE8'</span><span class="p">,</span> <span class="s1">'IE9'</span><span class="p">,</span> <span class="s1">'IE10'</span><span class="p">],</span> 
+  <span class="p">]</span>
+
+  <span class="c1">//....</span>
+
+  <span class="p">});</span>
+<span class="p">};</span>
+</pre></div>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Run your karma tests</p>
+
+<div class="highlight highlight-sh"><pre><span class="nv">$ </span>karma start
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Karma-iebrowsers-launcher maintained by <a href="https://github.com/livestax">livestax</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
